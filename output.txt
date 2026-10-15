@@ -1,0 +1,607 @@
+
+Attaching package: 'mice'
+
+The following object is masked from 'package:stats':
+
+    filter
+
+The following objects are masked from 'package:base':
+
+    cbind, rbind
+
+Type 'citation("pROC")' for a citation.
+
+Attaching package: 'pROC'
+
+The following objects are masked from 'package:stats':
+
+    cov, smooth, var
+
+Number of customers: 560 
+
+================ TASK 1 ================
+                  n_missing pct_missing
+education_level          66        11.8
+sat_value                57        10.2
+spend_electronics        70        12.5
+Complete rows: 384 of 560 
+    sat_value education_level spend_electronics    
+384         1               1                 1   0
+60          1               1                 0   1
+54          1               0                 1   1
+5           1               0                 0   2
+47          0               1                 1   1
+3           0               1                 0   2
+5           0               0                 1   2
+2           0               0                 0   3
+           57              66                70 193
+      incomplete_var     compared_with mean_if_missing mean_if_observed
+1    education_level               age            42.1             46.0
+2    education_level     spend_grocery            39.9             44.8
+3    education_level      annual_spend           701.8            714.9
+4    education_level         sat_price             4.0              4.0
+5    education_level         sat_staff             4.0              4.0
+6    education_level            gender              NA               NA
+7    education_level            region              NA               NA
+8    education_level preferred_channel              NA               NA
+9    education_level   loyalty_program              NA               NA
+10         sat_value               age            47.7             45.3
+11         sat_value     spend_grocery            47.1             43.9
+12         sat_value      annual_spend           717.7            712.8
+13         sat_value         sat_price             3.9              4.0
+14         sat_value         sat_staff             4.0              4.0
+15         sat_value            gender              NA               NA
+16         sat_value            region              NA               NA
+17         sat_value preferred_channel              NA               NA
+18         sat_value   loyalty_program              NA               NA
+19 spend_electronics               age            53.6             44.4
+20 spend_electronics     spend_grocery            40.6             44.7
+21 spend_electronics      annual_spend           727.9            711.3
+22 spend_electronics         sat_price             4.0              4.0
+23 spend_electronics         sat_staff             4.1              4.0
+24 spend_electronics            gender              NA               NA
+25 spend_electronics            region              NA               NA
+26 spend_electronics preferred_channel              NA               NA
+27 spend_electronics   loyalty_program              NA               NA
+         test p_value
+1      t-test  0.0880
+2      t-test  0.1244
+3      t-test  0.5153
+4      t-test  0.9157
+5      t-test  0.7587
+6  chi-square  0.1231
+7  chi-square  0.0000
+8  chi-square  0.8128
+9  chi-square  0.5516
+10     t-test  0.3258
+11     t-test  0.2956
+12     t-test  0.7936
+13     t-test  0.8538
+14     t-test  0.9582
+15 chi-square  0.6039
+16 chi-square  0.5254
+17 chi-square  0.7019
+18 chi-square  0.6691
+19     t-test  0.0000
+20     t-test  0.1838
+21     t-test  0.3638
+22     t-test  0.9193
+23     t-test  0.6225
+24 chi-square  0.3855
+25 chi-square  0.8214
+26 chi-square  0.8065
+27 chi-square  0.5433
+
+Missingness of education_level - logistic regression
+                Estimate Std. Error z value Pr(>|z|)
+(Intercept)       -1.179      1.005  -1.174    0.241
+age               -0.020      0.010  -2.018    0.044
+genderM           -0.414      0.286  -1.445    0.148
+regionNorth       -0.334      0.460  -0.726    0.468
+regionSouth        0.007      0.435   0.016    0.987
+regionWest         1.489      0.382   3.894    0.000
+spend_grocery     -0.012      0.006  -1.932    0.053
+annual_spend       0.001      0.001   0.473    0.637
+sat_price          0.025      0.142   0.175    0.861
+sat_staff         -0.068      0.140  -0.484    0.628
+loyalty_program    0.108      0.278   0.389    0.697
+
+Missingness of sat_value - logistic regression
+                Estimate Std. Error z value Pr(>|z|)
+(Intercept)       -3.024      1.036  -2.920    0.003
+age                0.011      0.009   1.208    0.227
+genderM           -0.205      0.288  -0.711    0.477
+regionNorth        0.607      0.418   1.451    0.147
+regionSouth        0.625      0.419   1.491    0.136
+regionWest         0.348      0.459   0.758    0.448
+spend_grocery      0.008      0.006   1.192    0.233
+annual_spend      -0.001      0.001  -0.368    0.713
+sat_price         -0.004      0.145  -0.028    0.978
+sat_staff         -0.018      0.141  -0.125    0.901
+loyalty_program    0.164      0.285   0.576    0.564
+
+Missingness of spend_electronics - logistic regression
+                Estimate Std. Error z value Pr(>|z|)
+(Intercept)       -3.882      1.000  -3.884    0.000
+age                0.036      0.009   3.940    0.000
+genderM            0.219      0.262   0.835    0.404
+regionNorth        0.067      0.374   0.180    0.857
+regionSouth        0.089      0.373   0.239    0.811
+regionWest         0.313      0.384   0.815    0.415
+spend_grocery     -0.007      0.006  -1.206    0.228
+annual_spend       0.000      0.001   0.084    0.933
+sat_price         -0.020      0.134  -0.147    0.883
+sat_staff          0.053      0.131   0.409    0.682
+loyalty_program    0.134      0.265   0.506    0.613
+null device 
+          1 
+  education_level         sat_value spend_electronics 
+           "polr"             "pmm"             "pmm" 
+NULL
+null device 
+          1 
+null device 
+          1 
+
+Education level: observed shares vs imputed shares (all 20 sets)
+
+high_school    bachelor    graduate 
+      0.298       0.431       0.271 
+edu_imputed
+high_school    bachelor    graduate 
+      0.289       0.442       0.269 
+
+Mean spend_electronics, complete cases: 55.34  (95% CI 53.18 - 57.51 )
+Mean spend_electronics, multiple imputation (pooled):
+         term estimate std.error statistic       df       p.value    2.5 %
+1 (Intercept) 55.90265  1.036799  53.91851 535.1655 1.854735e-218 53.86596
+    97.5 %
+1 57.93935
+Mean of imputed values only: 59.81 
+
+================ TASK 2 ================
+               sat_price sat_value sat_promotions sat_staff sat_store
+sat_price           1.00      0.57           0.59      0.12      0.03
+sat_value           0.57      1.00           0.52      0.16      0.12
+sat_promotions      0.59      0.52           1.00      0.04     -0.02
+sat_staff           0.12      0.16           0.04      1.00      0.55
+sat_store           0.03      0.12          -0.02      0.55      1.00
+sat_checkout        0.07      0.11          -0.01      0.56      0.54
+               sat_checkout
+sat_price              0.07
+sat_value              0.11
+sat_promotions        -0.01
+sat_staff              0.56
+sat_store              0.54
+sat_checkout           1.00
+  component eigenvalue pct_var cum_pct
+1         1      2.327    38.8    38.8
+2         2      1.921    32.0    70.8
+3         3      0.477     7.9    78.7
+4         4      0.455     7.6    86.3
+5         5      0.431     7.2    93.5
+6         6      0.390     6.5   100.0
+                  PC1    PC2
+sat_price      -0.424  0.409
+sat_value      -0.443  0.348
+sat_promotions -0.366  0.456
+sat_staff      -0.431 -0.380
+sat_store      -0.386 -0.427
+sat_checkout   -0.395 -0.420
+null device 
+          1 
+
+Call:
+factanal(x = X, factors = 2, scores = "regression", rotation = "varimax")
+
+Uniquenesses:
+     sat_price      sat_value sat_promotions      sat_staff      sat_store 
+         0.362          0.477          0.451          0.421          0.462 
+  sat_checkout 
+         0.450 
+
+Loadings:
+               Factor1 Factor2
+sat_price       0.797         
+sat_value       0.711         
+sat_promotions  0.740         
+sat_staff               0.755 
+sat_store               0.734 
+sat_checkout            0.741 
+
+               Factor1 Factor2
+SS loadings      1.697   1.680
+Proportion Var   0.283   0.280
+Cumulative Var   0.283   0.563
+
+Test of the hypothesis that 2 factors are sufficient.
+The chi square statistic is 2.14 on 4 degrees of freedom.
+The p-value is 0.709 
+Price/value factor = column 1 
+Check: correlation with factanal scores: 1 
+Canonical correlations: 0.503 0.166 0.039 
+Test of correlations 1 to 3 : chi2 = 177.95  df = 18  p = 0 
+Test of correlations 2 to 3 : chi2 = 16.33  df = 10  p = 0.0907 
+Test of correlations 3 to 3 : chi2 = 0.84  df = 4  p = 0.934 
+Structure correlations (first canonical variates)
+                 [,1]
+sat_price       0.914
+sat_value       0.738
+sat_promotions  0.821
+sat_staff       0.037
+sat_store      -0.046
+sat_checkout    0.043
+                    [,1]
+spend_grocery      0.143
+spend_electronics -0.139
+annual_spend       0.981
+null device 
+          1 
+
+================ TASK 3 ================
+       
+        Catalog In-store Mobile App Online
+  East       27       38         45     29
+  North      34       42         34     48
+  South      34       39         36     40
+  West       41       26         27     20
+       
+        Catalog In-store Mobile App Online
+  East     19.4     27.3       32.4   20.9
+  North    21.5     26.6       21.5   30.4
+  South    22.8     26.2       24.2   26.8
+  West     36.0     22.8       23.7   17.5
+
+	Pearson's Chi-squared test
+
+data:  tab
+X-squared = 18.351, df = 9, p-value = 0.03131
+
+Cramer's V: 0.105 
+       
+        Catalog In-store Mobile App Online
+  East    -1.54     0.45       2.19  -1.14
+  North   -0.96     0.23      -1.31   2.04
+  South   -0.49     0.09      -0.39   0.79
+  West     3.26    -0.84      -0.46  -1.93
+
+Principal inertias (eigenvalues):
+
+ dim    value      %   cum%   scree plot               
+ 1      0.021036  64.2  64.2  ****************         
+ 2      0.011733  35.8 100.0  *********                
+ 3      1e-06000   0.0 100.0                           
+        -------- -----                                 
+ Total: 0.032770 100.0                                 
+
+
+Rows:
+    name   mass  qlt  inr    k=1 cor ctr    k=2 cor ctr  
+1 | East |  248 1000  267 |  -54  82  34 |  180 918 684 |
+2 | Nrth |  282 1000  202 | -109 509 160 | -107 491 277 |
+3 | Soth |  266  999   31 |  -50 663  32 |  -36 336  29 |
+4 | West |  204 1000  500 |  283 993 774 |  -24   7  10 |
+
+Columns:
+    name   mass  qlt  inr    k=1 cor ctr    k=2 cor ctr  
+1 | Ctlg |  243 1000  457 |  239 927 660 |  -67  73  93 |
+2 | Inst |  259  999   31 |  -59 897  43 |   20 102   9 |
+3 | MblA |  254 1000  209 |  -15   9   3 |  163 991 577 |
+4 | Onln |  245 1000  304 | -159 622 294 | -124 378 321 |
+null device 
+          1 
+null device 
+          1 
+  k within_SS avg_silhouette
+1 1    1118.0          0.000
+2 2     355.4          0.589
+3 3     119.7          0.654
+4 4     101.7          0.516
+5 5      84.7          0.402
+6 6      73.8          0.411
+7 7      64.5          0.409
+8 8      56.6          0.349
+Silhouette, hierarchical: 0.593 0.652 0.514 0.399 0.397 0.327 0.307 
+null device 
+          1 
+      hierarchical
+kmeans   1   2   3
+     1   0   0 115
+     2 219   0   0
+     3   1 224   1
+Adjusted Rand index k-means vs Ward: 0.989 
+  cluster spend_grocery spend_electronics annual_spend   age f_price f_service
+1       1         80.26             19.96       780.39 43.43    0.11     -0.17
+2       2         19.43             80.41       662.92 45.13   -0.06      0.04
+3       3         49.89             50.16       728.09 47.11    0.00      0.05
+  premium_upgrade size
+1            0.50  115
+2            0.25  219
+3            0.38  226
+  cluster spend_grocery spend_electronics          seg_name
+1       1      80.26261          19.95739 Grocery Loyalists
+2       2      19.42511          80.41142  Tech Enthusiasts
+3       3      49.89469          50.16372 Balanced Shoppers
+                   
+                    Catalog In-store Mobile App Online
+  Balanced Shoppers      53       54         66     53
+  Grocery Loyalists      26       35         28     26
+  Tech Enthusiasts       57       56         48     58
+null device 
+          1 
+
+================ TASK 4 ================
+
+Call:
+lm(formula = annual_spend ~ age, data = d)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-406.10  -85.11    3.80   84.78  385.52 
+
+Coefficients:
+            Estimate Std. Error t value Pr(>|t|)    
+(Intercept) 579.0029    15.7845  36.682   <2e-16 ***
+age           2.9475     0.3259   9.044   <2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 126.4 on 558 degrees of freedom
+Multiple R-squared:  0.1279,	Adjusted R-squared:  0.1263 
+F-statistic:  81.8 on 1 and 558 DF,  p-value: < 2.2e-16
+
+null device 
+          1 
+Analysis of Variance Table
+
+Model 1: annual_spend ~ age
+Model 2: annual_spend ~ age + I(age^2)
+  Res.Df     RSS Df Sum of Sq      F   Pr(>F)    
+1    558 8914185                                 
+2    557 8156331  1    757854 51.754 2.04e-12 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+Analysis of Variance Table
+
+Model 1: annual_spend ~ age
+Model 2: annual_spend ~ ns(age, df = 3)
+  Res.Df     RSS Df Sum of Sq      F    Pr(>F)    
+1    558 8914185                                  
+2    556 8167449  2    746736 25.417 2.737e-11 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+       df      AIC
+m_lin   3 7013.333
+m_quad  4 6965.577
+m_ns    5 6968.340
+              Estimate  Std. Error   t value     Pr(>|t|)
+(Intercept) 287.692290 43.22136444  6.656252 6.737364e-11
+age          17.625120  2.06397224  8.539417 1.290209e-16
+I(age^2)     -0.160986  0.02237768 -7.194042 2.040079e-12
+Peak age (quadratic, -b1/2b2): 54.7 
+Peak age (spline): 55  predicted spend: 774 
+Quadratic predictions at 20/45/70: 575.8 754.8 732.6 
+                      term    estimate   std.error  statistic       df
+1              (Intercept) 307.7046045 34.30819921  8.9688358 548.0090
+2                      age  17.2505164  1.61329285 10.6927371 548.4882
+3                 I(age^2)  -0.1577969  0.01748142 -9.0265513 548.7173
+4                  f_price  68.0658981  4.53511748 15.0086295 540.1041
+5                f_service  -1.4311113  4.51934302 -0.3166636 549.0876
+6 segmentGrocery Loyalists  56.7944347 10.90952971  5.2059471 549.1221
+7  segmentTech Enthusiasts -56.5043418  8.96997885 -6.2992726 548.4662
+       p.value       2.5 %      97.5 %
+1 4.732495e-18 240.3129302 375.0962788
+2 2.285199e-24  14.0815276  20.4195051
+3 2.983868e-18  -0.1921356  -0.1234582
+4 8.241512e-43  59.1572678  76.9745283
+5 7.516192e-01 -10.3084285   7.4462060
+6 2.732177e-07  35.3649167  78.2239528
+7 6.140131e-10 -74.1240593 -38.8846243
+          est     lo 95     hi 95         fmi
+R^2 0.5195348 0.4600605 0.5753055 0.007605541
+   test statistic df1      df2 dfcom      p.value         riv
+ 1 ~~ 2  55.94264   2 550.8768   553 7.610649e-23 0.003457711
+   test statistic df1      df2 dfcom      p.value         riv
+ 1 ~~ 2  113.2708   2 550.2059   553 6.339789e-42 0.008823067
+Peak age in full model: 54.7 
+
+================ TASK 5 ================
+Share upgraded: 0.357 
+               term   estimate   std.error statistic       df      p.value
+1       (Intercept) 0.09477751 0.302935355 -7.777974 459.0825 4.902719e-14
+2 educationbachelor 1.85981011 0.266027522  2.332369 326.5473 2.028862e-02
+3 educationgraduate 2.80505375 0.293100567  3.519006 343.7991 4.914131e-04
+4     spend_grocery 1.02436516 0.004275077  5.631024 546.4215 2.868525e-08
+5           f_price 0.88411459 0.114296000 -1.077628 532.4246 2.816877e-01
+6         f_service 2.98604131 0.130919532  8.355885 548.4524 5.353518e-16
+       2.5 %    97.5 %
+1 0.05225943 0.1718881
+2 1.10200402 3.1387305
+3 1.57605783 4.9924098
+4 1.01579897 1.0330036
+5 0.70631424 1.1066726
+6 2.30892826 3.8617236
+Odds ratio for +10 EUR grocery spend: 1.272 
+               term    estimate  std.error statistic       df      p.value
+1       (Intercept) -1.38850567 0.17172118 -8.085815 461.8123 5.474569e-15
+2 educationbachelor  0.35283316 0.15506363  2.275409 331.3483 2.351959e-02
+3 educationgraduate  0.58669995 0.17104250  3.430141 348.5561 6.756358e-04
+4     spend_grocery  0.01440895 0.00249919  5.765447 546.9244 1.362523e-08
+5           f_price -0.07578852 0.06764524 -1.120382 533.3434 2.630552e-01
+6         f_service  0.64766684 0.07396236  8.756709 549.3701 2.486359e-17
+        2.5 %      97.5 %
+1 -1.72595738 -1.05105396
+2  0.04779986  0.65786645
+3  0.25029472  0.92310519
+4  0.00949976  0.01931813
+5 -0.20867231  0.05709527
+6  0.50238321  0.79295047
+               term  logit probit ratio
+1       (Intercept) -2.356 -1.389  1.70
+2 educationbachelor  0.620  0.353  1.76
+3 educationgraduate  1.031  0.587  1.76
+4     spend_grocery  0.024  0.014  1.71
+5           f_price -0.123 -0.076  1.62
+6         f_service  1.094  0.648  1.69
+Correlation of predicted probabilities: 0.9996 
+Max absolute difference: 0.0149 
+null device 
+          1 
+AUC logit: 0.769  95% CI: 0.728 0.81 
+AUC probit: 0.769 
+  threshold sensitivity specificity
+1 0.3105813       0.775       0.625
+null device 
+          1 
+
+Confusion matrix at threshold 0.5 
+         actual
+predicted   0   1
+        0 317 105
+        1  43  95
+Accuracy: 0.736  Sensitivity: 0.475  Specificity: 0.881  Precision: 0.688 
+
+Confusion matrix at threshold 0.311 
+         actual
+predicted   0   1
+        0 225  45
+        1 135 155
+Accuracy: 0.679  Sensitivity: 0.775  Specificity: 0.625  Precision: 0.534 
+
+================ TASK 6 ================
+       churn
+loyalty   0   1
+      0 136 159
+      1 171  94
+   
+        0     1
+  0 0.461 0.539
+  1 0.645 0.355
+  loyalty_program months_observed
+1               0        6.597288
+2               1        7.603396
+       censored_before_6
+loyalty FALSE TRUE
+      0   245   50
+      1   218   47
+Call: survfit(formula = Surv(months_observed, churn_event) ~ loyalty_program, 
+    data = d)
+
+                    n events median 0.95LCL 0.95UCL
+loyalty_program=0 295    159    8.5     7.4     9.7
+loyalty_program=1 265     94     NA      NA      NA
+Call: survfit(formula = Surv(months_observed, churn_event) ~ loyalty_program, 
+    data = d)
+
+                loyalty_program=0 
+ time n.risk n.event survival std.err lower 95% CI upper 95% CI
+  3.0    222      42    0.847  0.0218        0.806        0.891
+  6.0    153      51    0.641  0.0301        0.584        0.702
+  9.0     96      41    0.457  0.0324        0.398        0.526
+ 11.8     67      25    0.335  0.0317        0.278        0.403
+
+                loyalty_program=1 
+ time n.risk n.event survival std.err lower 95% CI upper 95% CI
+  3.0    207      30    0.879  0.0208        0.839        0.920
+  6.0    165      23    0.777  0.0271        0.726        0.832
+  9.0    125      25    0.652  0.0323        0.592        0.719
+ 11.8     95      16    0.564  0.0347        0.500        0.636
+
+null device 
+          1 
+Call:
+survdiff(formula = Surv(months_observed, churn_event) ~ loyalty_program, 
+    data = d)
+
+                    N Observed Expected (O-E)^2/E (O-E)^2/V
+loyalty_program=0 295      159      123      10.9      21.3
+loyalty_program=1 265       94      130      10.2      21.3
+
+ Chisq= 21.3  on 1 degrees of freedom, p= 4e-06 
+Call:
+coxph(formula = Surv(months_observed, churn_event) ~ loyalty_program + 
+    age, data = d)
+
+  n= 560, number of events= 253 
+
+                     coef exp(coef)  se(coef)      z Pr(>|z|)    
+loyalty_program -0.607632  0.544639  0.130616 -4.652 3.29e-06 ***
+age              0.009267  1.009310  0.003941  2.352   0.0187 *  
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+                exp(coef) exp(-coef) lower .95 upper .95
+loyalty_program    0.5446     1.8361    0.4216    0.7035
+age                1.0093     0.9908    1.0015    1.0171
+
+Concordance= 0.588  (se = 0.018 )
+Likelihood ratio test= 27.04  on 2 df,   p=1e-06
+Wald test            = 26.16  on 2 df,   p=2e-06
+Score (logrank) test = 26.78  on 2 df,   p=2e-06
+
+Enrolled customers leave at a rate 45.5 % lower
+Each extra 10 years of age changes the churn rate by 9.7 %
+                chisq df    p
+loyalty_program 2.036  1 0.15
+age             0.413  1 0.52
+GLOBAL          2.368  2 0.31
+null device 
+          1 
+Customers kept for the 6-month analysis: 463 of 560 
+   
+        0     1
+  0 0.620 0.380
+  1 0.757 0.243
+                   Estimate  Std. Error   z value    Pr(>|z|)
+(Intercept)     -1.08819752 0.314000911 -3.465587 0.000529075
+loyalty_program -0.67733877 0.207425057 -3.265463 0.001092854
+age              0.01328654 0.006281759  2.115099 0.034421517
+                    Estimate Std. Error   z value     Pr(>|z|)
+(Intercept)     -0.669005445 0.18882637 -3.542966 0.0003956535
+loyalty_program -0.412635235 0.12436794 -3.317859 0.0009071041
+age              0.008109617 0.00378465  2.142765 0.0321319415
+Odds ratios (logit):
+                   OR 2.5 % 97.5 %
+(Intercept)     0.337 0.182  0.623
+loyalty_program 0.508 0.338  0.763
+age             1.013 1.001  1.026
+Ratio logit/probit coefficients: 1.63 1.64 1.64 
+Predicted P(leave within 6 months) at mean age, not enrolled / enrolled
+  logit : 0.381 0.238 
+  probit: 0.382 0.238 
+  Kaplan-Meier 1 - S(6): 0.359 0.223 
+
+Session info
+R version 4.3.3 (2024-02-29)
+Platform: x86_64-pc-linux-gnu (64-bit)
+Running under: Ubuntu 24.04.5 LTS
+
+Matrix products: default
+BLAS:   /usr/lib/x86_64-linux-gnu/blas/libblas.so.3.12.0 
+LAPACK: /usr/lib/x86_64-linux-gnu/lapack/liblapack.so.3.12.0
+
+locale:
+[1] C
+
+time zone: Europe/Paris
+tzcode source: system (glibc)
+
+attached base packages:
+[1] splines   stats     graphics  grDevices utils     datasets  methods  
+[8] base     
+
+other attached packages:
+[1] pROC_1.18.5    ca_0.71.1      cluster_2.1.6  survival_3.5-8 mice_3.16.0   
+
+loaded via a namespace (and not attached):
+ [1] utf8_1.2.4       generics_0.1.3   tidyr_1.3.1      shape_1.4.6     
+ [5] stringi_1.8.3    lattice_0.22-5   lme4_1.1-35.1    magrittr_2.0.3  
+ [9] mitml_0.4-5      grid_4.3.3       iterators_1.0.14 foreach_1.5.2   
+[13] jomo_2.7-6       plyr_1.8.9       glmnet_4.1-8     Matrix_1.6-5    
+[17] nnet_7.3-19      backports_1.4.1  purrr_1.0.2      fansi_1.0.5     
+[21] codetools_0.2-19 cli_3.6.2        rlang_1.1.3      pan_1.9         
+[25] tools_4.3.3      nloptr_2.0.3     minqa_1.2.6      dplyr_1.1.4     
+[29] boot_1.3-30      broom_1.0.5      vctrs_0.6.5      R6_2.5.1        
+[33] rpart_4.1.23     lifecycle_1.0.4  stringr_1.5.1    MASS_7.3-60.0.1 
+[37] pkgconfig_2.0.3  pillar_1.9.0     glue_1.7.0       Rcpp_1.0.12     
+[41] tibble_3.2.1     tidyselect_1.2.0 nlme_3.1-164     compiler_4.3.3  
