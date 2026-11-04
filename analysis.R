@@ -1,13 +1,3 @@
-<<<<<<< HEAD
-###Library 
-
-library(mice)     
-library(survival)   
-library(cluster)    
-library(ca)         
-library(pROC)       
-library(splines)    
-=======
 ###############################################################################
 ##  Customer Analytics at ShopCo -- individual project
 ##  Modern Computational Methods, Fall 2026
@@ -40,7 +30,6 @@ library(cluster)
 library(ca)
 library(pROC)
 library(splines)
->>>>>>> 35f674149d5031d6c9c7bd4fe59dd7b8dd6153ac
 
 dir.create("figures", showWarnings = FALSE)
 
@@ -62,30 +51,17 @@ sat_items <- c("sat_price", "sat_value", "sat_promotions",
                "sat_staff", "sat_store", "sat_checkout")
 
 
-<<<<<<< HEAD
-
-# TASK 1 - Data quality and missing values
-
-
-#  1a. Estimation of the missingness
-=======
 ###############################################################################
 ## ---- 1. TASK 1 - Missing values ------------------------------------------
 ###############################################################################
 
 section("1a. How much is missing?")
 
->>>>>>> 35f674149d5031d6c9c7bd4fe59dd7b8dd6153ac
 n_miss   <- colSums(is.na(d))
 pct_miss <- round(100 * n_miss / nrow(d), 1)
 miss_table <- data.frame(n_missing = n_miss, pct_missing = pct_miss)
 print(miss_table[miss_table$n_missing > 0, ])
 
-<<<<<<< HEAD
-
-# 1b. Is missingness correlated to the variables ? 
-# For each incomplete variable, compare customers with and without a value
-=======
 cat("Complete rows:", sum(complete.cases(d)), "of", nrow(d), "\n")
 
 # missing data pattern (1 = observed, 0 = missing)
@@ -101,11 +77,10 @@ section("1b. Is missingness related to the observed variables?")
 #   - categorical variables -> chi-square test of independence
 # If something is significant, MCAR is not plausible.
 
->>>>>>> 35f674149d5031d6c9c7bd4fe59dd7b8dd6153ac
 incomplete <- c("education_level", "sat_value", "spend_electronics")
 num_vars   <- c("age", "spend_grocery", "annual_spend", "sat_price", "sat_staff")
 cat_vars   <- c("gender", "region", "preferred_channel", "loyalty_program")
-#refaire c'est trop complet ici
+
 miss_tests <- data.frame()
 
 for (v in incomplete) {
@@ -132,14 +107,8 @@ for (v in incomplete) {
 }
 print(miss_tests)
 
-<<<<<<< HEAD
-# A logistic regression of the missingness indicator on all observed
-# variables summarises the same question in one model per variable
-# refaire trop complexe ici aussi 
-=======
 # Same question with one model per variable: logistic regression of the
 # missingness indicator (1 = missing) on all the observed variables
->>>>>>> 35f674149d5031d6c9c7bd4fe59dd7b8dd6153ac
 for (v in incomplete) {
   d$miss_ind <- as.numeric(is.na(d[[v]]))
   m <- glm(miss_ind ~ age + gender + region + spend_grocery + annual_spend +
@@ -166,9 +135,6 @@ boxplot(d$age ~ is.na(d$education_level), names = c("observed", "missing"),
         main = "education_level", ylab = "Age", xlab = "", col = "grey85")
 dev.off()
 
-<<<<<<< HEAD
-# --- 1c. Multiple imputation with mice -
-=======
 
 section("1c. Multiple imputation with mice")
 
@@ -176,7 +142,6 @@ section("1c. Multiple imputation with mice")
 #   education_level  : ordered factor   -> "polr" (proportional odds model)
 #   sat_value        : rating 1-7       -> "pmm"  (only imputes values that exist)
 #   spend_electronics: skewed, >= 0     -> "pmm"
->>>>>>> 35f674149d5031d6c9c7bd4fe59dd7b8dd6153ac
 meth <- make.method(d)
 meth["education_level"]   <- "polr"
 meth["sat_value"]         <- "pmm"
@@ -249,17 +214,11 @@ cat("Correlations with spend_electronics (complete cases):  age",
     "  grocery", round(cor(d$spend_grocery, d$spend_electronics, use = "complete.obs"), 3), "\n")
 
 
-<<<<<<< HEAD
-
-# TASK 2 - What does "satisfaction" mean?
-
-=======
 ###############################################################################
 ## ---- 2. TASK 2 - What does "satisfaction" mean? -------------------------
 ###############################################################################
 
 # Exploratory methods -> we use the FIRST completed data set
->>>>>>> 35f674149d5031d6c9c7bd4fe59dd7b8dd6153ac
 d1 <- complete(imp, 1)
 X  <- d1[, sat_items]
 
@@ -361,14 +320,9 @@ plot(U, V, pch = 19, col = rgb(0, 0, 0, 0.3),
 dev.off()
 
 
-<<<<<<< HEAD
-
-# TASK 3 - Channels and customer segments
-=======
 ###############################################################################
 ## ---- 3. TASK 3 - Channels and customer segments --------------------------
 ###############################################################################
->>>>>>> 35f674149d5031d6c9c7bd4fe59dd7b8dd6153ac
 
 section("3a. Region x preferred channel")
 
@@ -511,14 +465,9 @@ for (i in 1:20) {
 }
 
 
-<<<<<<< HEAD
-# TASK 4 - What drives annual spend?
-# age and annual_spend have no missing values: plain lm on d
-=======
 ###############################################################################
 ## ---- 4. TASK 4 - What drives annual spend? -------------------------------
 ###############################################################################
->>>>>>> 35f674149d5031d6c9c7bd4fe59dd7b8dd6153ac
 
 section("4a. Linear effect of age")
 
