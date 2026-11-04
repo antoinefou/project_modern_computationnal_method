@@ -1,28 +1,15 @@
-###############################################################################
-##  Customer Analytics at ShopCo -- individual project
-##  Modern Computational Methods, Fall 2026
-##  Antoine Foucart -- data file: project_data_Y0PV0T.csv
-##
-##  Run it section by section in RStudio: the plots appear in the Plots pane.
-##  All numbers and figures of the report come from this script.
-##  The comments give the values obtained with this data file.
-##
-##  Packages: mice (imputation), survival (Kaplan-Meier, Cox),
-##            cluster (silhouette), ca (correspondence analysis),
-##            pROC (ROC curve). splines comes with R.
-##
 ##  Sections
-##    0. Setup
+##    0. Library
 ##    1. Task 1 - Missing values and multiple imputation
 ##    2. Task 2 - PCA, factor analysis, canonical correlation
 ##    3. Task 3 - Region x channel (CA) and clustering
 ##    4. Task 4 - What drives annual spend?
 ##    5. Task 5 - Who upgrades to premium? (logit / probit)
 ##    6. Task 6 - Retention program (survival analysis)
-###############################################################################
 
 
-## ---- 0. Setup ---------------------------------------------------------------
+
+## 0. Setup
 
 library(mice)
 library(survival)
@@ -36,7 +23,6 @@ data <- read.csv("data/project_data_Y0PV0T.csv", stringsAsFactors = TRUE)
 # education is an ordered variable: high school < bachelor < graduate
 data$education_level <- factor(data$education_level, ordered = TRUE,
                                levels = c("high_school", "bachelor", "graduate"))
-
 str(data)
 nrow(data)            # 560 customers
 
@@ -45,11 +31,8 @@ sat_items <- c("sat_price", "sat_value", "sat_promotions",
                "sat_staff", "sat_store", "sat_checkout")
 
 
-###############################################################################
-## ---- 1. TASK 1 - Missing values ------------------------------------------
-###############################################################################
-
-## ---- 1a. How much is missing? ----
+##  1. TASK 1 - Missing values
+##  1a. How much is missing?
 
 n_miss   <- colSums(is.na(data))
 pct_miss <- round(100 * n_miss / nrow(data), 1)
@@ -64,8 +47,7 @@ sum(complete.cases(data))     # 384 complete rows out of 560 (69 %)
 md.pattern(data[, c("education_level", "sat_value", "spend_electronics")],
            plot = FALSE)
 
-
-## ---- 1b. Is missingness related to the observed variables? ----
+## ---- 1b. Is missingness related to the observed variables? 
 
 # For each incomplete variable, compare customers with a missing value
 # and customers with an observed value:
@@ -141,7 +123,7 @@ boxplot(data$age ~ is.na(data$education_level), names = c("observed", "missing")
 par(mfrow = c(1, 1))
 
 
-## ---- 1c. Multiple imputation with mice ----
+## 1c. Multiple imputation with mice
 
 # One method per incomplete variable, chosen from its type:
 #   education_level  : ordered factor   -> "polr" (proportional odds model)
@@ -175,7 +157,7 @@ round(prop.table(table(data$education_level)), 3)   # observed: 0.298 0.431 0.27
 round(prop.table(table(edu_imputed)), 3)            # imputed : 0.289 0.442 0.269
 
 
-## ---- 1d. Mean of spend_electronics: complete cases vs multiple imputation ----
+## ---- 1d. Mean of spend_electronics: complete cases vs multiple imputation ----****))))
 
 # (a) complete cases
 x_obs   <- data$spend_electronics[!is.na(data$spend_electronics)]
@@ -215,15 +197,14 @@ cor(data$age, data$spend_electronics, use = "complete.obs")            # 0.003
 cor(data$spend_grocery, data$spend_electronics, use = "complete.obs")  # -0.893
 
 
-###############################################################################
-## ---- 2. TASK 2 - What does "satisfaction" mean? -------------------------
-###############################################################################
+## 2. TASK 2 - What does "satisfaction" mean? 
+
 
 # Exploratory methods -> we use the FIRST completed data set
 d1 <- complete(imp, 1)
 X  <- d1[, sat_items]
 
-## ---- 2a. PCA on the six satisfaction items ----
+## ---- 2a. PCA on the six satisfaction items 
 
 R <- cor(X)
 round(R, 2)
@@ -231,11 +212,11 @@ round(R, 2)
 #             staff / store / checkout   (0.54-0.56)
 # correlations between the blocks are below 0.16
 
-# PCA by hand: eigen decomposition of the correlation matrix ...
+# PCA by hand: eigen decomposition of the correlation matrix 
 eig <- eigen(R, symmetric = TRUE)
 lambda <- eig$values
 
-# ... and with prcomp (scaled data): the eigenvalues are the same
+#  and with prcomp (scaled data): the eigenvalues are the same
 pca <- prcomp(X, scale. = TRUE)
 max(abs(lambda - pca$sdev^2))     # about 1e-15
 
@@ -247,7 +228,7 @@ var_tab
 # eigenvalues 2.33 and 1.92, then all about 0.4-0.5
 # the first two components explain 70.8 % of the variance
 
-sum(lambda > 1)                   # Kaiser rule: keep 2 components
+sum(lambda > 1)                   # Kaiser rule: keep at least  2 components
 round(pca$rotation[, 1:2], 3)
 # PC1: all loadings of the same sign (general satisfaction level)
 # PC2: price items (+) against service items (-)
@@ -257,7 +238,7 @@ plot(lambda, type = "b", pch = 19, xlab = "Component", ylab = "Eigenvalue",
 abline(h = 1, lty = 2, col = "red")
 
 
-## ---- 2b. Factor analysis: 2 factors, varimax rotation ----
+## 2b. Factor analysis: 2 factors, varimax rotation 
 
 fa <- factanal(X, factors = 2, rotation = "varimax", scores = "regression")
 print(fa, cutoff = 0.3)
@@ -265,22 +246,10 @@ print(fa, cutoff = 0.3)
 # Factor 1: price 0.80, value 0.71, promotions 0.74  -> "Price & Value"
 # Factor 2: staff 0.76, store 0.73, checkout 0.74    -> "Store Experience"
 
-# Which column is the "price" factor? (the order of factors is arbitrary)
-L <- fa$loadings[, 1:2]
-if (abs(L["sat_price", 1]) > abs(L["sat_price", 2])) {
-  price_col <- 1
-} else {
-  price_col <- 2
-}
-serv_col <- 3 - price_col
-price_col        # 1 = Price & Value
-serv_col         # 2 = Store Experience
 
+## ---- 2c. Factor scores 
 
-## ---- 2c. Factor scores ----
-
-# Regression (Thomson) scores: F = Z R^{-1} L, with Z the standardised items.
-# We write the formula ourselves so we can apply the SAME rule (loadings and
+# We write the formula ourselves so we can apply the same rule (loadings and
 # correlation matrix of data set 1) to each of the 20 imputed data sets
 # in Tasks 4 and 5.
 mean_X <- colMeans(X)
@@ -299,7 +268,7 @@ d1$f_price   <- sc1$f_price
 d1$f_service <- sc1$f_service
 
 
-## ---- 2d. Canonical correlation: satisfaction items vs spending ----
+## 2d. Canonical correlation: satisfaction items vs spending 
 
 Y  <- d1[, c("spend_grocery", "spend_electronics", "annual_spend")]
 cc <- cancor(scale(X), scale(Y))
@@ -333,11 +302,9 @@ plot(U, V, pch = 19, col = rgb(0, 0, 0, 0.3),
      main = paste("First canonical pair, r =", round(cc$cor[1], 2)))
 
 
-###############################################################################
-## ---- 3. TASK 3 - Channels and customer segments --------------------------
-###############################################################################
 
-## ---- 3a. Region x preferred channel ----
+## 3. TASK 3 - Channels and customer segments
+##  3a. Region x preferred channel 
 
 # region and channel have no missing values: we use the original data
 tab <- table(data$region, data$preferred_channel)
@@ -357,7 +324,7 @@ round(chi$stdres, 2)
 # West-Catalog +3.26, East-Mobile App +2.19, North-Online +2.04
 
 
-## ---- 3b. Correspondence analysis ----
+##  3b. Correspondence analysis 
 
 # CA by hand: SVD of the matrix of standardised residuals
 P_mat <- tab / sum(tab)                  # relative frequencies
@@ -378,7 +345,7 @@ summary(ca_res)
 plot(ca_res, main = "Correspondence analysis: region x channel")
 
 
-## ---- 3c. Clustering on grocery and electronics spend ----
+## 3c. Clustering on grocery and electronics spend 
 
 # completed data set 1, both variables standardised so they count equally
 S <- scale(d1[, c("spend_grocery", "spend_electronics")])
@@ -439,7 +406,7 @@ ari <- function(a, b) {
 ari(km$cluster, hc_cl)    # 0.989 -> the two methods agree
 
 
-## ---- 3d. Profile of the segments ----
+## 3d. Profile of the segments 
 
 d1$cluster <- km$cluster
 profile <- aggregate(cbind(spend_grocery, spend_electronics, annual_spend, age,
@@ -479,12 +446,9 @@ for (i in 1:20) {
   data_list[[i]] <- di
 }
 
+## 4. TASK 4 - What drives annual spend ?
 
-###############################################################################
-## ---- 4. TASK 4 - What drives annual spend? -------------------------------
-###############################################################################
-
-## ---- 4a. Linear effect of age ----
+## 4a. Linear effect of age
 
 # age and annual_spend are complete: ordinary lm on the original data
 m_lin <- lm(annual_spend ~ age, data = data)
@@ -492,7 +456,7 @@ summary(m_lin)
 # annual_spend = 579 + 2.95 * age, R2 = 0.13
 
 
-## ---- 4b. Non-linear effect of age ----
+##4b. Non-linear effect of age 
 
 m_quad <- lm(annual_spend ~ age + I(age^2), data = data)
 m_ns   <- lm(annual_spend ~ ns(age, df = 3), data = data)
@@ -512,7 +476,6 @@ legend("bottomleft", c("linear", "quadratic", "spline df=3"),
        col = c("red", "darkgreen", "blue"), lty = c(1, 1, 2), lwd = 2, bty = "n")
 par(mfrow = c(1, 1))
 # the residuals have an inverted-U shape: the linear model is not adequate
-
 # partial F-tests (nested models) and AIC
 anova(m_lin, m_quad)        # F = 51.8, p < 0.001
 anova(m_lin, m_ns)          # F = 25.4, p < 0.001
@@ -566,10 +529,7 @@ est <- pool_full$pooled$estimate
 -est[2] / (2 * est[3])        # peak age still 54.7
 
 
-###############################################################################
-## ---- 5. TASK 5 - Who upgrades to premium? --------------------------------
-###############################################################################
-
+## ---- 5. TASK 5 - Who upgrades to premium?
 ## ---- 5a. Logit and probit, pooled over the 20 imputed data sets ----
 
 mean(data$premium_upgrade)    # 35.7 % upgraded
@@ -720,7 +680,7 @@ abline(h = coef(cox)[2], col = "red", lty = 2)
 par(mfrow = c(1, 1))
 
 
-## ---- 6d. Discrete time: did the customer leave within 6 months? ----
+## 6d. Discrete time: did the customer leave within 6 months? 
 
 # Customers censored before month 6 are removed: we do not know whether
 # they would have left before month 6 or not.
@@ -745,6 +705,3 @@ predict(lg6, nd, type = "response")       # logit : 0.381  0.238
 predict(pb6, nd, type = "response")       # probit: 0.382  0.238
 1 - summary(km_fit, times = 6)$surv       # Kaplan-Meier: 0.359  0.223
 
-
-## ---- Session info ----
-sessionInfo()
