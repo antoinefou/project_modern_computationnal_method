@@ -1,18 +1,11 @@
-# =====================================================================
-# Customer Analytics at ShopCo - Individual project
-# Antoine Foucart - data file: project_data_Y0PV0T.csv
-#
-# Run from the repository root:  Rscript analysis.R
-# Every number and figure of the report is produced by this script.
-# Figures are written to the folder figures/
-# =====================================================================
+###Library 
 
-library(mice)       # multiple imputation
-library(survival)   # Kaplan-Meier, Cox model
-library(cluster)    # silhouette
-library(ca)         # correspondence analysis
-library(pROC)       # ROC curve and AUC
-library(splines)    # natural splines (comes with R)
+library(mice)     
+library(survival)   
+library(cluster)    
+library(ca)         
+library(pROC)       
+library(splines)    
 
 dir.create("figures", showWarnings = FALSE)
 
@@ -26,27 +19,23 @@ sat_items <- c("sat_price", "sat_value", "sat_promotions",
                "sat_staff", "sat_store", "sat_checkout")
 
 
-# =====================================================================
-# TASK 1 - Data quality and missing values
-# =====================================================================
-cat("\n================ TASK 1 ================\n")
 
-# --- 1a. How much is missing? ---------------------------------------
+# TASK 1 - Data quality and missing values
+
+
+#  1a. Estimation of the missingness
 n_miss   <- colSums(is.na(d))
 pct_miss <- round(100 * n_miss / nrow(d), 1)
 miss_table <- data.frame(n_missing = n_miss, pct_missing = pct_miss)
 print(miss_table[miss_table$n_missing > 0, ])
 
-cat("Complete rows:", sum(complete.cases(d)), "of", nrow(d), "\n")
-print(md.pattern(d[, c("education_level", "sat_value", "spend_electronics")],
-                 plot = FALSE))
 
-# --- 1b. Is missingness related to observed variables? --------------
+# 1b. Is missingness correlated to the variables ? 
 # For each incomplete variable, compare customers with and without a value
 incomplete <- c("education_level", "sat_value", "spend_electronics")
 num_vars   <- c("age", "spend_grocery", "annual_spend", "sat_price", "sat_staff")
 cat_vars   <- c("gender", "region", "preferred_channel", "loyalty_program")
-
+#refaire c'est trop complet ici
 miss_tests <- data.frame()
 for (v in incomplete) {
   is_miss <- is.na(d[[v]])
@@ -72,6 +61,7 @@ print(miss_tests)
 
 # A logistic regression of the missingness indicator on all observed
 # variables summarises the same question in one model per variable
+# refaire trop complexe ici aussi 
 for (v in incomplete) {
   d$miss_ind <- as.numeric(is.na(d[[v]]))
   m <- glm(miss_ind ~ age + gender + region + spend_grocery + annual_spend +
@@ -93,7 +83,7 @@ boxplot(d$age ~ is.na(d$education_level), names = c("observed", "missing"),
         main = "education_level", ylab = "Age", xlab = "", col = "grey85")
 dev.off()
 
-# --- 1c. Multiple imputation with mice ------------------------------
+# --- 1c. Multiple imputation with mice -
 meth <- make.method(d)
 meth["education_level"]   <- "polr"   # ordered factor -> prop. odds model
 meth["sat_value"]         <- "pmm"    # 1-7 rating -> pmm keeps valid values
@@ -137,11 +127,9 @@ cat("Mean of imputed values only:",
     round(mean(long_imp$spend_electronics[rep(is.na(d$spend_electronics), 20)]), 2), "\n")
 
 
-# =====================================================================
+
 # TASK 2 - What does "satisfaction" mean?
-# =====================================================================
-cat("\n================ TASK 2 ================\n")
-# Exploratory methods: we use the FIRST completed data set
+
 d1 <- complete(imp, 1)
 
 X <- d1[, sat_items]
@@ -216,10 +204,8 @@ plot(U, V, pch = 19, col = rgb(0, 0, 0, 0.3),
 dev.off()
 
 
-# =====================================================================
+
 # TASK 3 - Channels and customer segments
-# =====================================================================
-cat("\n================ TASK 3 ================\n")
 
 # --- 3a. Region x channel (both complete, no imputation needed) -----
 tab <- table(d$region, d$preferred_channel)
@@ -333,10 +319,7 @@ long$education <- factor(long$education_level, ordered = FALSE,
 imp2 <- as.mids(long)
 
 
-# =====================================================================
 # TASK 4 - What drives annual spend?
-# =====================================================================
-cat("\n================ TASK 4 ================\n")
 # age and annual_spend have no missing values: plain lm on d
 
 m_lin <- lm(annual_spend ~ age, data = d)
