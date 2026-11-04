@@ -3,9 +3,8 @@
 ##  Modern Computational Methods, Fall 2026
 ##  Antoine Foucart -- data file: project_data_Y0PV0T.csv
 ##
-##  Run from the repository root:   Rscript analysis.R > output.txt
+##  Run it section by section in RStudio: the plots appear in the Plots pane.
 ##  All numbers and figures of the report come from this script.
-##  Figures are saved in the folder figures/
 ##
 ##  Packages: mice (imputation), survival (Kaplan-Meier, Cox),
 ##            cluster (silhouette), ca (correspondence analysis),
@@ -31,7 +30,6 @@ library(ca)
 library(pROC)
 library(splines)
 
-dir.create("figures", showWarnings = FALSE)
 
 # prints a visible header in the console (same idea as in the course scripts)
 section <- function(title) cat("\n", strrep("=", 70), "\n", title, "\n",
@@ -125,7 +123,6 @@ print(round(tapply(is.na(d$spend_electronics),
 print(round(tapply(is.na(d$education_level), d$region, mean), 3))
 
 # Figure: age of customers with / without a value
-png("figures/t1_missing_age.png", width = 1400, height = 650, res = 150)
 par(mfrow = c(1, 3))
 boxplot(d$age ~ is.na(d$spend_electronics), names = c("observed", "missing"),
         main = "spend_electronics", ylab = "Age", xlab = "", col = "grey85")
@@ -133,7 +130,7 @@ boxplot(d$age ~ is.na(d$sat_value), names = c("observed", "missing"),
         main = "sat_value", ylab = "Age", xlab = "", col = "grey85")
 boxplot(d$age ~ is.na(d$education_level), names = c("observed", "missing"),
         main = "education_level", ylab = "Age", xlab = "", col = "grey85")
-dev.off()
+par(mfrow = c(1, 1))
 
 
 section("1c. Multiple imputation with mice")
@@ -157,14 +154,10 @@ imp <- mice(d, m = 20, maxit = 20, method = meth, predictorMatrix = pred,
 print(imp$loggedEvents)          # NULL = no problem
 
 # Convergence check: the 20 chains should mix, with no trend
-png("figures/t1_convergence.png", width = 1400, height = 750, res = 150)
 print(plot(imp, c("sat_value", "spend_electronics"), layout = c(2, 2)))
-dev.off()
 
 # Observed (blue) vs imputed (red) densities
-png("figures/t1_density.png", width = 1400, height = 650, res = 150)
 print(densityplot(imp, ~ spend_electronics + sat_value))
-dev.off()
 
 # imp$imp$education_level has one row per missing customer and one column
 # per imputed data set: we compare the shares of the imputed values with
@@ -243,11 +236,9 @@ print(var_tab)
 cat("Kaiser rule (eigenvalue > 1): keep", sum(lambda > 1), "components\n")
 print(round(pca$rotation[, 1:2], 3))      # loadings of PC1 and PC2
 
-png("figures/t2_scree.png", width = 1000, height = 700, res = 150)
 plot(lambda, type = "b", pch = 19, xlab = "Component", ylab = "Eigenvalue",
      main = "Scree plot - six satisfaction items")
 abline(h = 1, lty = 2, col = "red")
-dev.off()
 
 
 section("2b. Factor analysis: 2 factors, varimax rotation")
@@ -313,11 +304,9 @@ V <- scale(Y) %*% cc$ycoef[, 1]
 cat("Structure correlations, satisfaction side:\n"); print(round(cor(X, U), 3))
 cat("Structure correlations, spending side:\n");     print(round(cor(Y, V), 3))
 
-png("figures/t2_cancor.png", width = 900, height = 800, res = 150)
 plot(U, V, pch = 19, col = rgb(0, 0, 0, 0.3),
      xlab = "Satisfaction variate U1", ylab = "Spending variate V1",
      main = paste("First canonical pair, r =", round(cc$cor[1], 2)))
-dev.off()
 
 
 ###############################################################################
@@ -355,9 +344,7 @@ cat("Total inertia =", round(sum(inertias), 6), " = chi2 / n =",
 ca_res <- ca(tab)
 print(summary(ca_res))
 
-png("figures/t3_ca.png", width = 1000, height = 900, res = 150)
 plot(ca_res, main = "Correspondence analysis: region x channel")
-dev.off()
 
 
 section("3c. Clustering on grocery and electronics spend")
@@ -367,10 +354,8 @@ S <- scale(d1[, c("spend_grocery", "spend_electronics")])
 
 # (a) Ward hierarchical clustering
 hc <- hclust(dist(S), method = "ward.D2")
-png("figures/t3_dendrogram.png", width = 1200, height = 700, res = 150)
 plot(hc, labels = FALSE, main = "Ward hierarchical clustering", xlab = "", sub = "")
 rect.hclust(hc, k = 3, border = "red")
-dev.off()
 
 # (b) k-means for k = 1..8: elbow (within SS) and average silhouette
 set.seed(2026)
@@ -391,7 +376,6 @@ for (k in 2:8) {
 }
 cat("Silhouette, Ward:", round(sil_hc[2:8], 3), "\n")
 
-png("figures/t3_elbow_silhouette.png", width = 1400, height = 650, res = 150)
 par(mfrow = c(1, 2))
 plot(1:8, wss, type = "b", pch = 19, xlab = "Number of clusters k",
      ylab = "Total within sum of squares", main = "Elbow (k-means)")
@@ -400,7 +384,7 @@ plot(2:8, sil[2:8], type = "b", pch = 19, xlab = "Number of clusters k",
      ylim = range(c(sil[2:8], sil_hc[2:8])))
 lines(2:8, sil_hc[2:8], type = "b", pch = 17, col = "red")
 legend("topright", c("k-means", "Ward"), col = c("black", "red"), pch = c(19, 17))
-dev.off()
+par(mfrow = c(1, 1))
 
 # Final choice: k = 3 (elbow + highest silhouette for both methods)
 K <- 3
@@ -440,13 +424,11 @@ d1$segment <- factor(seg_name[d1$cluster],
                      levels = c("Balanced Shoppers", "Grocery Loyalists", "Tech Enthusiasts"))
 print(table(d1$segment, d1$preferred_channel))
 
-png("figures/t3_segments.png", width = 1000, height = 850, res = 150)
 cols <- c("grey50", "darkgreen", "steelblue")
 plot(d1$spend_grocery, d1$spend_electronics, col = cols[d1$segment], pch = 19,
      xlab = "Monthly grocery spend (EUR)", ylab = "Monthly electronics spend (EUR)",
      main = "Customer segments (k-means, k = 3)")
 legend("topright", levels(d1$segment), col = cols, pch = 19, bty = "n")
-dev.off()
 
 
 # Data sets for Tasks 4 and 5: for each of the 20 imputed data sets we add
@@ -481,7 +463,6 @@ section("4b. Non-linear effect of age")
 m_quad <- lm(annual_spend ~ age + I(age^2), data = d)
 m_ns   <- lm(annual_spend ~ ns(age, df = 3), data = d)
 
-png("figures/t4_resid_age.png", width = 1400, height = 650, res = 150)
 par(mfrow = c(1, 2))
 plot(d$age, residuals(m_lin), pch = 19, col = rgb(0, 0, 0, 0.3),
      xlab = "Age", ylab = "Residual (EUR)", main = "Residuals of linear model")
@@ -495,7 +476,7 @@ lines(age_grid$age, predict(m_quad, age_grid), col = "darkgreen", lwd = 2)
 lines(age_grid$age, predict(m_ns, age_grid), col = "blue", lwd = 2, lty = 2)
 legend("bottomleft", c("linear", "quadratic", "spline df=3"),
        col = c("red", "darkgreen", "blue"), lty = c(1, 1, 2), lwd = 2, bty = "n")
-dev.off()
+par(mfrow = c(1, 1))
 
 # partial F-tests (nested models) and AIC
 print(anova(m_lin, m_quad))
@@ -594,12 +575,10 @@ for (i in 1:20) {
 cat("Correlation of predicted probabilities:", round(cor(p_logit, p_probit), 4), "\n")
 cat("Largest absolute difference:", round(max(abs(p_logit - p_probit)), 4), "\n")
 
-png("figures/t5_logit_probit.png", width = 800, height = 800, res = 150)
 plot(p_logit, p_probit, pch = 19, col = rgb(0, 0, 0, 0.3),
      xlab = "P(upgrade) - logit", ylab = "P(upgrade) - probit",
      main = "Logit vs probit predictions")
 abline(0, 1, col = "red")
-dev.off()
 
 
 section("5c. ROC curve, AUC and threshold")
@@ -616,11 +595,9 @@ best <- coords(roc_logit, "best", best.method = "youden",
 print(best)
 thr <- best$threshold[1]
 
-png("figures/t5_roc.png", width = 850, height = 850, res = 150)
 plot(roc_logit, main = paste("ROC curve - AUC =", round(auc(roc_logit), 3)),
      legacy.axes = TRUE)
 points(best$specificity[1], best$sensitivity[1], pch = 19, col = "red")
-dev.off()
 
 # confusion matrices at 0.5 and at the Youden threshold
 y <- d$premium_upgrade
@@ -660,13 +637,11 @@ km_fit <- survfit(Surv(months_observed, churn_event) ~ loyalty_program, data = d
 print(km_fit)
 print(summary(km_fit, times = c(3, 6, 9, 11.8)))
 
-png("figures/t6_km.png", width = 1100, height = 800, res = 150)
 plot(km_fit, col = c("red", "blue"), lwd = 2, conf.int = TRUE,
      xlab = "Months since start of observation", ylab = "Share still a customer",
      main = "Kaplan-Meier retention curves")
 legend("bottomleft", c("Not enrolled", "Enrolled in program"),
        col = c("red", "blue"), lwd = 2, bty = "n")
-dev.off()
 
 lr <- survdiff(Surv(months_observed, churn_event) ~ loyalty_program, data = d)
 print(lr)
@@ -684,13 +659,12 @@ cat("Each extra 10 years of age changes the churn rate by",
 zph <- cox.zph(cox)
 print(zph)                       # p > 0.05: no evidence against proportional hazards
 
-png("figures/t6_zph.png", width = 1400, height = 650, res = 150)
 par(mfrow = c(1, 2))
 plot(zph[1], main = "Schoenfeld residuals: loyalty_program")
 abline(h = coef(cox)[1], col = "red", lty = 2)
 plot(zph[2], main = "Schoenfeld residuals: age")
 abline(h = coef(cox)[2], col = "red", lty = 2)
-dev.off()
+par(mfrow = c(1, 1))
 
 
 section("6d. Discrete time: did the customer leave within 6 months?")

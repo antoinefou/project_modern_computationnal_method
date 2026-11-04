@@ -163,8 +163,6 @@ loyalty_program    0.134      0.265   0.506    0.613
   0.057   0.111   0.170   0.222 
  East North South  West 
 0.079 0.063 0.087 0.281 
-null device 
-          1 
 
 ======================================================================
 1c. Multiple imputation with mice
@@ -172,10 +170,6 @@ null device
   education_level         sat_value spend_electronics 
            "polr"             "pmm"             "pmm" 
 NULL
-null device 
-          1 
-null device 
-          1 
 
 Education level: observed shares
 
@@ -231,8 +225,6 @@ sat_promotions -0.366  0.456
 sat_staff      -0.431 -0.380
 sat_store      -0.386 -0.427
 sat_checkout   -0.395 -0.420
-null device 
-          1 
 
 ======================================================================
 2b. Factor analysis: 2 factors, varimax rotation
@@ -291,8 +283,6 @@ Structure correlations, spending side:
 spend_grocery      0.143
 spend_electronics -0.139
 annual_spend       0.981
-null device 
-          1 
 
 ======================================================================
 3a. Region x preferred channel
@@ -353,14 +343,10 @@ Columns:
 2 | Inst |  259  999   31 |  -59 897  43 |   20 102   9 |
 3 | MblA |  254 1000  209 |  -15   9   3 |  163 991 577 |
 4 | Onln |  245 1000  304 | -159 622 294 | -124 378 321 |
-null device 
-          1 
 
 ======================================================================
 3c. Clustering on grocery and electronics spend
 ======================================================================
-null device 
-          1 
   k within_SS avg_silhouette
 1 1    1118.0          0.000
 2 2     355.4          0.589
@@ -371,8 +357,6 @@ null device
 7 7      64.5          0.409
 8 8      56.6          0.349
 Silhouette, Ward: 0.593 0.652 0.514 0.399 0.397 0.327 0.307 
-null device 
-          1 
       hierarchical
 kmeans   1   2   3
      1   0   0 115
@@ -396,8 +380,6 @@ Adjusted Rand index k-means vs Ward: 0.989
   Balanced Shoppers      53       54         66     53
   Grocery Loyalists      26       35         28     26
   Tech Enthusiasts       57       56         48     58
-null device 
-          1 
 
 ======================================================================
 4a. Linear effect of age
@@ -425,8 +407,6 @@ F-statistic:  81.8 on 1 and 558 DF,  p-value: < 2.2e-16
 ======================================================================
 4b. Non-linear effect of age
 ======================================================================
-null device 
-          1 
 Analysis of Variance Table
 
 Model 1: annual_spend ~ age
@@ -537,8 +517,6 @@ Probit - coefficients:
 ======================================================================
 Correlation of predicted probabilities: 0.9996 
 Largest absolute difference: 0.0149 
-null device 
-          1 
 
 ======================================================================
 5c. ROC curve, AUC and threshold
@@ -547,8 +525,6 @@ AUC logit: 0.769  95% CI: 0.728 0.81
 AUC probit: 0.769 
   threshold sensitivity specificity
 1 0.3105813       0.775       0.625
-null device 
-          1 
 
 Confusion matrix at threshold 0.5 
          actual
@@ -609,8 +585,6 @@ Call: survfit(formula = Surv(months_observed, churn_event) ~ loyalty_program,
   9.0    125      25    0.652  0.0323        0.592        0.719
  11.8     95      16    0.564  0.0347        0.500        0.636
 
-null device 
-          1 
 Call:
 survdiff(formula = Surv(months_observed, churn_event) ~ loyalty_program, 
     data = d)
@@ -651,8 +625,6 @@ Each extra 10 years of age changes the churn rate by 9.7 %
 loyalty_program 2.036  1 0.15
 age             0.413  1 0.52
 GLOBAL          2.368  2 0.31
-null device 
-          1 
 
 ======================================================================
 6d. Discrete time: did the customer leave within 6 months?
