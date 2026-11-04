@@ -155,7 +155,7 @@ Pooled R² = 0.52 (vs 0.20 with age and age² only). Pooled Wald tests confirm t
 
 *Interpretation:* holding the other variables fixed, graduates have 2.8 times the odds of upgrading of high-school customers (bachelors 1.9 times). Every extra EUR 10 of monthly grocery spend raises the odds by **27 %** (1.024^10). The strongest driver is **Store Experience**: one standard deviation more satisfaction with staff, cleanliness and checkout **triples** the odds of upgrading. Satisfaction with prices has no effect. This is the mirror image of Task 4: price satisfaction drives *how much* customers spend, while store experience drives *commitment* to the brand.
 
-**Probit.** The probit coefficients (e.g. Store Experience 0.648, graduate 0.587, grocery 0.0144) give the same signs and significance. The logit/probit ratios are **1.62--1.76**, close to the expected 1.6. Predicted probabilities (averaged over imputations) are practically identical: correlation 0.9996, largest difference 0.015. **The choice of link does not matter** here; I report the logit because odds ratios are easier to explain.
+**Probit.** The probit coefficients (e.g. Store Experience 0.648, graduate 0.587, grocery 0.0144) give the same signs and significance. The logit/probit ratios are **1.63--1.76**, close to the expected 1.6. Predicted probabilities (averaged over imputations) are practically identical: correlation 0.9996, largest difference 0.015. **The choice of link does not matter** here; I report the logit because odds ratios are easier to explain.
 
 ![](../figures/t5_roc.png){width=40%} ![](../figures/t5_logit_probit.png){width=40%}
 
