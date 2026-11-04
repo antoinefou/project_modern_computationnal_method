@@ -37,16 +37,12 @@ The following objects are masked from 'package:stats':
  $ loyalty_program  : int  0 1 1 1 0 0 0 0 1 1 ...
  $ months_observed  : num  4.3 11.8 11.8 5.4 9.3 3 11.8 5.6 10.3 11.8 ...
  $ churn_event      : int  0 0 0 1 1 0 0 1 0 0 ...
-Number of customers: 560 
-
-======================================================================
-1a. How much is missing?
-======================================================================
+[1] 560
                   n_missing pct_missing
 education_level          66        11.8
 sat_value                57        10.2
 spend_electronics        70        12.5
-Complete rows: 384 of 560 
+[1] 384
     sat_value education_level spend_electronics    
 384         1               1                 1   0
 60          1               1                 0   1
@@ -57,10 +53,6 @@ Complete rows: 384 of 560
 5           0               0                 1   2
 2           0               0                 0   3
            57              66                70 193
-
-======================================================================
-1b. Is missingness related to the observed variables?
-======================================================================
       incomplete_var     compared_with mean_if_missing mean_if_observed
 1    education_level               age            42.1             46.0
 2    education_level     spend_grocery            39.9             44.8
@@ -117,8 +109,7 @@ Complete rows: 384 of 560
 25 chi-square  0.8214
 26 chi-square  0.8065
 27 chi-square  0.5433
-
-Missingness of education_level - logistic regression
+[1] "education_level"
                 Estimate Std. Error z value Pr(>|z|)
 (Intercept)       -1.179      1.005  -1.174    0.241
 age               -0.020      0.010  -2.018    0.044
@@ -131,8 +122,7 @@ annual_spend       0.001      0.001   0.473    0.637
 sat_price          0.025      0.142   0.175    0.861
 sat_staff         -0.068      0.140  -0.484    0.628
 loyalty_program    0.108      0.278   0.389    0.697
-
-Missingness of sat_value - logistic regression
+[1] "sat_value"
                 Estimate Std. Error z value Pr(>|z|)
 (Intercept)       -3.024      1.036  -2.920    0.003
 age                0.011      0.009   1.208    0.227
@@ -145,8 +135,7 @@ annual_spend      -0.001      0.001  -0.368    0.713
 sat_price         -0.004      0.145  -0.028    0.978
 sat_staff         -0.018      0.141  -0.125    0.901
 loyalty_program    0.164      0.285   0.576    0.564
-
-Missingness of spend_electronics - logistic regression
+[1] "spend_electronics"
                 Estimate Std. Error z value Pr(>|z|)
 (Intercept)       -3.882      1.000  -3.884    0.000
 age                0.036      0.009   3.940    0.000
@@ -163,38 +152,26 @@ loyalty_program    0.134      0.265   0.506    0.613
   0.057   0.111   0.170   0.222 
  East North South  West 
 0.079 0.063 0.087 0.281 
-
-======================================================================
-1c. Multiple imputation with mice
-======================================================================
   education_level         sat_value spend_electronics 
            "polr"             "pmm"             "pmm" 
 NULL
 
-Education level: observed shares
-
 high_school    bachelor    graduate 
       0.298       0.431       0.271 
-Education level: imputed shares (all 20 data sets)
 edu_imputed
 high_school    bachelor    graduate 
       0.289       0.442       0.269 
-
-======================================================================
-1d. Mean of spend_electronics: complete cases vs multiple imputation
-======================================================================
-Complete cases: mean = 55.34  95% CI: 53.18 - 57.51 
-Rubin's rules by hand: mean = 55.9  se = 1.037 
+[1] 55.3449
+[1] 53.18422 57.50558
+[1] 55.90265
+[1] 1.036799
          term estimate std.error statistic       df       p.value    2.5 %
 1 (Intercept) 55.90265  1.036799  53.91851 535.1655 1.854735e-218 53.86596
     97.5 %
 1 57.93935
-Mean of the imputed values only: 59.81 
-Correlations with spend_electronics (complete cases):  age 0.003   grocery -0.893 
-
-======================================================================
-2a. PCA on the six satisfaction items
-======================================================================
+[1] 59.80693
+[1] 0.003095615
+[1] -0.8934181
                sat_price sat_value sat_promotions sat_staff sat_store
 sat_price           1.00      0.57           0.59      0.12      0.03
 sat_value           0.57      1.00           0.52      0.16      0.12
@@ -209,7 +186,7 @@ sat_promotions        -0.01
 sat_staff              0.56
 sat_store              0.54
 sat_checkout           1.00
-max |eigen(R) - prcomp sdev^2| = 2.66e-15 
+[1] 2.664535e-15
   component eigenvalue pct_var cum_pct
 1         1      2.327    38.8    38.8
 2         2      1.921    32.0    70.8
@@ -217,7 +194,7 @@ max |eigen(R) - prcomp sdev^2| = 2.66e-15
 4         4      0.455     7.6    86.3
 5         5      0.431     7.2    93.5
 6         6      0.390     6.5   100.0
-Kaiser rule (eigenvalue > 1): keep 2 components
+[1] 2
                   PC1    PC2
 sat_price      -0.424  0.409
 sat_value      -0.443  0.348
@@ -225,10 +202,6 @@ sat_promotions -0.366  0.456
 sat_staff      -0.431 -0.380
 sat_store      -0.386 -0.427
 sat_checkout   -0.395 -0.420
-
-======================================================================
-2b. Factor analysis: 2 factors, varimax rotation
-======================================================================
 
 Call:
 factanal(x = X, factors = 2, scores = "regression", rotation = "varimax")
@@ -256,21 +229,14 @@ Cumulative Var   0.283   0.563
 Test of the hypothesis that 2 factors are sufficient.
 The chi square statistic is 2.14 on 4 degrees of freedom.
 The p-value is 0.709 
-Price & Value factor = column 1    Store Experience factor = column 2 
-
-======================================================================
-2c. Factor scores
-======================================================================
-Correlation with factanal scores: 1 
-
-======================================================================
-2d. Canonical correlation: satisfaction items vs spending
-======================================================================
-Canonical correlations: 0.503 0.166 0.039 
-Test of correlations 1 to 3 : chi2 = 177.95  df = 18  p = 0 
-Test of correlations 2 to 3 : chi2 = 16.33  df = 10  p = 0.0907 
-Test of correlations 3 to 3 : chi2 = 0.84  df = 4  p = 0.934 
-Structure correlations, satisfaction side:
+[1] 1
+[1] 2
+[1] 1
+[1] 0.503 0.166 0.039
+  from   chi2 df p_value
+1    1 177.95 18  0.0000
+2    2  16.33 10  0.0907
+3    3   0.84  4  0.9340
                  [,1]
 sat_price       0.914
 sat_value       0.738
@@ -278,15 +244,10 @@ sat_promotions  0.821
 sat_staff       0.037
 sat_store      -0.046
 sat_checkout    0.043
-Structure correlations, spending side:
                     [,1]
 spend_grocery      0.143
 spend_electronics -0.139
 annual_spend       0.981
-
-======================================================================
-3a. Region x preferred channel
-======================================================================
        
         Catalog In-store Mobile App Online
   East       27       38         45     29
@@ -305,20 +266,18 @@ annual_spend       0.981
 data:  tab
 X-squared = 18.351, df = 9, p-value = 0.03131
 
-Cramer's V: 0.105 
-Standardised residuals (|value| > 2 = cell that departs from independence):
+X-squared 
+0.1045147 
        
         Catalog In-store Mobile App Online
   East    -1.54     0.45       2.19  -1.14
   North   -0.96     0.23      -1.31   2.04
   South   -0.49     0.09      -0.39   0.79
   West     3.26    -0.84      -0.46  -1.93
-
-======================================================================
-3b. Correspondence analysis
-======================================================================
-Principal inertias by hand: 0.021036 0.011733 1e-06 0 
-Total inertia = 0.03277  = chi2 / n = 0.03277 
+[1] 0.021036 0.011733 0.000001 0.000000
+[1] 0.03276996
+ X-squared 
+0.03276996 
 
 Principal inertias (eigenvalues):
 
@@ -343,10 +302,6 @@ Columns:
 2 | Inst |  259  999   31 |  -59 897  43 |   20 102   9 |
 3 | MblA |  254 1000  209 |  -15   9   3 |  163 991 577 |
 4 | Onln |  245 1000  304 | -159 622 294 | -124 378 321 |
-
-======================================================================
-3c. Clustering on grocery and electronics spend
-======================================================================
   k within_SS avg_silhouette
 1 1    1118.0          0.000
 2 2     355.4          0.589
@@ -356,17 +311,13 @@ Columns:
 6 6      73.8          0.411
 7 7      64.5          0.409
 8 8      56.6          0.349
-Silhouette, Ward: 0.593 0.652 0.514 0.399 0.397 0.327 0.307 
+[1] 0.593 0.652 0.514 0.399 0.397 0.327 0.307
       hierarchical
 kmeans   1   2   3
      1   0   0 115
      2 219   0   0
      3   1 224   1
-Adjusted Rand index k-means vs Ward: 0.989 
-
-======================================================================
-3d. Profile of the segments
-======================================================================
+[1] 0.9890963
   cluster spend_grocery spend_electronics annual_spend   age f_price f_service
 1       1         80.26             19.96       780.39 43.43    0.11     -0.17
 2       2         19.43             80.41       662.92 45.13   -0.06      0.04
@@ -381,12 +332,8 @@ Adjusted Rand index k-means vs Ward: 0.989
   Grocery Loyalists      26       35         28     26
   Tech Enthusiasts       57       56         48     58
 
-======================================================================
-4a. Linear effect of age
-======================================================================
-
 Call:
-lm(formula = annual_spend ~ age, data = d)
+lm(formula = annual_spend ~ age, data = data)
 
 Residuals:
     Min      1Q  Median      3Q     Max 
@@ -403,10 +350,6 @@ Residual standard error: 126.4 on 558 degrees of freedom
 Multiple R-squared:  0.1279,	Adjusted R-squared:  0.1263 
 F-statistic:  81.8 on 1 and 558 DF,  p-value: < 2.2e-16
 
-
-======================================================================
-4b. Non-linear effect of age
-======================================================================
 Analysis of Variance Table
 
 Model 1: annual_spend ~ age
@@ -433,13 +376,12 @@ m_ns    5 6968.340
 (Intercept) 287.692290 43.22136444  6.656252 6.737364e-11
 age          17.625120  2.06397224  8.539417 1.290209e-16
 I(age^2)     -0.160986  0.02237768 -7.194042 2.040079e-12
-Peak age (quadratic, -b1 / (2 b2)): 54.7 
-Peak age (spline): 55  predicted spend: 774 
-Quadratic predictions at age 20 / 45 / 70: 575.8 754.8 732.6 
-
-======================================================================
-4c. Full model, pooled over the 20 imputed data sets
-======================================================================
+     age 
+54.74116 
+[1] 55
+[1] 773.9671
+       1        2        3 
+575.8003 754.8261 732.6194 
                       term    estimate   std.error  statistic       df
 1              (Intercept) 307.7046045 34.30819921  8.9688358 548.0090
 2                      age  17.2505164  1.61329285 10.6927371 548.4882
@@ -458,21 +400,14 @@ Quadratic predictions at age 20 / 45 / 70: 575.8 754.8 732.6
 7 6.140131e-10 -74.1240593 -38.8846243
           est     lo 95     hi 95         fmi
 R^2 0.5195348 0.4600605 0.5753055 0.007605541
-R2 with age and age^2 only:
           est     lo 95     hi 95          fmi
 R^2 0.2020021 0.1449849 0.2633666 1.052632e-09
    test statistic df1      df2 dfcom      p.value         riv
  1 ~~ 2  55.94264   2 550.8768   553 7.610649e-23 0.003457711
    test statistic df1      df2 dfcom      p.value         riv
  1 ~~ 2  113.2708   2 550.2059   553 6.339789e-42 0.008823067
-Peak age in the full model: 54.7 
-
-======================================================================
-5a. Logit and probit, pooled over the 20 imputed data sets
-======================================================================
-Share upgraded: 0.357 
-
-Logit - odds ratios:
+[1] 54.66051
+[1] 0.3571429
                term   estimate   std.error statistic       df      p.value
 1       (Intercept) 0.09477751 0.302935355 -7.777974 459.0825 4.902719e-14
 2 educationbachelor 1.85981011 0.266027522  2.332369 326.5473 2.028862e-02
@@ -487,9 +422,7 @@ Logit - odds ratios:
 4 1.01579897 1.0330036
 5 0.70631424 1.1066726
 6 2.30892826 3.8617236
-Odds ratio for +10 EUR grocery spend: 1.272 
-
-Probit - coefficients:
+[1] 1.272178
                term    estimate  std.error statistic       df      p.value
 1       (Intercept) -1.38850567 0.17172118 -8.085815 461.8123 5.474569e-15
 2 educationbachelor  0.35283316 0.15506363  2.275409 331.3483 2.351959e-02
@@ -511,38 +444,25 @@ Probit - coefficients:
 4     spend_grocery  0.024  0.014  1.67
 5           f_price -0.123 -0.076  1.63
 6         f_service  1.094  0.648  1.69
-
-======================================================================
-5b. Predicted probabilities
-======================================================================
-Correlation of predicted probabilities: 0.9996 
-Largest absolute difference: 0.0149 
-
-======================================================================
-5c. ROC curve, AUC and threshold
-======================================================================
-AUC logit: 0.769  95% CI: 0.728 0.81 
-AUC probit: 0.769 
+[1] 0.9995906
+[1] 0.01491566
+Area under the curve: 0.7689
+95% CI: 0.7282-0.8097 (DeLong)
+Area under the curve: 0.7688
   threshold sensitivity specificity
 1 0.3105813       0.775       0.625
-
-Confusion matrix at threshold 0.5 
          actual
 predicted   0   1
         0 317 105
         1  43  95
-Accuracy: 0.736  Sensitivity: 0.475  Specificity: 0.881  Precision: 0.688 
-
-Confusion matrix at threshold 0.311 
+  threshold    accuracy sensitivity specificity   precision 
+      0.500       0.736       0.475       0.881       0.688 
          actual
 predicted   0   1
         0 225  45
         1 135 155
-Accuracy: 0.679  Sensitivity: 0.775  Specificity: 0.625  Precision: 0.534 
-
-======================================================================
-6a. Raw numbers
-======================================================================
+  threshold    accuracy sensitivity specificity   precision 
+      0.311       0.679       0.775       0.625       0.534 
        churn
 loyalty   0   1
       0 136 159
@@ -558,18 +478,14 @@ loyalty   0   1
 loyalty FALSE TRUE
       0   245   50
       1   218   47
-
-======================================================================
-6b. Kaplan-Meier curves and log-rank test
-======================================================================
 Call: survfit(formula = Surv(months_observed, churn_event) ~ loyalty_program, 
-    data = d)
+    data = data)
 
                     n events median 0.95LCL 0.95UCL
 loyalty_program=0 295    159    8.5     7.4     9.7
 loyalty_program=1 265     94     NA      NA      NA
 Call: survfit(formula = Surv(months_observed, churn_event) ~ loyalty_program, 
-    data = d)
+    data = data)
 
                 loyalty_program=0 
  time n.risk n.event survival std.err lower 95% CI upper 95% CI
@@ -587,20 +503,16 @@ Call: survfit(formula = Surv(months_observed, churn_event) ~ loyalty_program,
 
 Call:
 survdiff(formula = Surv(months_observed, churn_event) ~ loyalty_program, 
-    data = d)
+    data = data)
 
                     N Observed Expected (O-E)^2/E (O-E)^2/V
 loyalty_program=0 295      159      123      10.9      21.3
 loyalty_program=1 265       94      130      10.2      21.3
 
  Chisq= 21.3  on 1 degrees of freedom, p= 4e-06 
-
-======================================================================
-6c. Cox model and proportional hazards
-======================================================================
 Call:
 coxph(formula = Surv(months_observed, churn_event) ~ loyalty_program + 
-    age, data = d)
+    age, data = data)
 
   n= 560, number of events= 253 
 
@@ -619,17 +531,15 @@ Likelihood ratio test= 27.04  on 2 df,   p=1e-06
 Wald test            = 26.16  on 2 df,   p=2e-06
 Score (logrank) test = 26.78  on 2 df,   p=2e-06
 
-Enrolled customers leave at a rate 45.5 % lower
-Each extra 10 years of age changes the churn rate by 9.7 %
+loyalty_program 
+       45.53609 
+     age 
+9.710122 
                 chisq df    p
 loyalty_program 2.036  1 0.15
 age             0.413  1 0.52
 GLOBAL          2.368  2 0.31
-
-======================================================================
-6d. Discrete time: did the customer leave within 6 months?
-======================================================================
-Customers kept for the 6-month analysis: 463 of 560 
+[1] 463
    
         0     1
   0 0.620 0.380
@@ -642,20 +552,17 @@ age              0.01328654 0.006281759  2.115099 0.034421517
 (Intercept)     -0.669005445 0.18882637 -3.542966 0.0003956535
 loyalty_program -0.412635235 0.12436794 -3.317859 0.0009071041
 age              0.008109617 0.00378465  2.142765 0.0321319415
-Odds ratios (logit):
                    OR 2.5 % 97.5 %
 (Intercept)     0.337 0.182  0.623
 loyalty_program 0.508 0.338  0.763
 age             1.013 1.001  1.026
-Ratio logit / probit coefficients: 1.63 1.64 1.64 
-P(leave within 6 months) at mean age, not enrolled / enrolled
-  logit : 0.381 0.238 
-  probit: 0.382 0.238 
-  Kaplan-Meier 1 - S(6): 0.359 0.223 
-
-======================================================================
-Session info
-======================================================================
+    (Intercept) loyalty_program             age 
+           1.63            1.64            1.64 
+        1         2 
+0.3811886 0.2383322 
+        1         2 
+0.3818847 0.2378703 
+[1] 0.3593373 0.2228379
 R version 4.3.3 (2024-02-29)
 Platform: x86_64-pc-linux-gnu (64-bit)
 Running under: Ubuntu 24.04.5 LTS
