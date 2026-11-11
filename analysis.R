@@ -246,6 +246,11 @@ print(fa, cutoff = 0.3)
 # Factor 1: price 0.80, value 0.71, promotions 0.74  -> "Price & Value"
 # Factor 2: staff 0.76, store 0.73, checkout 0.74    -> "Store Experience"
 
+# loadings, used to compute the factor scores below
+L <- fa$loadings[, 1:2]
+price_col <- 1     # factor 1 = Price & Value
+serv_col  <- 2     # factor 2 = Store Experience
+
 
 ## 2c. Factor scores 
 
