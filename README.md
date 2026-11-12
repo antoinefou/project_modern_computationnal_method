@@ -7,6 +7,7 @@ Individual project, Modern Computational Methods (Antoine Foucart).
 - `figures/`: PNG versions of the plots, used in the report
 - `output.txt`: full console output of the script
 - `report/report.md` → `report/report.pdf`: the report (management summary + one section per task)
+- `report/report.tex`: LaTeX version of the report (`cd report && pdflatex report.tex`)
 
 Run from the repository root:
 
